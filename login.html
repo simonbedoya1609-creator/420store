@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>420 Store | Iniciar Sesión</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    .login-container {
+      max-width: 450px;
+      margin: 4em auto;
+      background: #111;
+      border: 1px solid #b8860b;
+      border-radius: 15px;
+      padding: 2.5em;
+      box-shadow: 0 0 25px rgba(218,165,32,0.15);
+      text-align: center;
+    }
+
+    .login-tabs {
+      display: flex;
+      justify-content: space-around;
+      border-bottom: 1px solid #b8860b;
+      margin-bottom: 1.5em;
+    }
+
+    .login-tab {
+      flex: 1;
+      padding: 0.8em;
+      cursor: pointer;
+      color: #ccc;
+      font-weight: bold;
+      transition: 0.3s;
+      font-size: 0.9rem;
+    }
+
+    .login-tab.active {
+      color: #daa520;
+      border-bottom: 2px solid #daa520;
+    }
+
+    .login-form {
+      display: none;
+      text-align: left;
+    }
+
+    .login-form.active {
+      display: block;
+    }
+
+    label {
+      color: #daa520;
+      font-size: 0.9rem;
+      display: block;
+      margin-top: 1em;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8em;
+      margin-top: 0.3em;
+      border: 1px solid #b8860b;
+      border-radius: 10px;
+      background: #0b0b0b;
+      color: #f4f4f4;
+    }
+
+    .btn-login {
+      width: 100%;
+      background: transparent;
+      border: 2px solid #b8860b;
+      color: #daa520;
+      padding: 0.8em;
+      margin-top: 1.5em;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-login:hover {
+      background: linear-gradient(90deg, #b8860b, #daa520);
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .mensaje-login {
+      padding: 0.8em;
+      margin: 1em 0;
+      border-radius: 10px;
+      text-align: center;
+      display: none;
+    }
+
+    .mensaje-login.exito {
+      background: #1a3a1a;
+      border: 1px solid #4CAF50;
+      color: #4CAF50;
+    }
+
+    .mensaje-login.error {
+      background: #3a1a1a;
+      border: 1px solid #ff4444;
+      color: #ff4444;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>420 STORE</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="productos.html">Productos</a>
+      <a href="ofertas.html">Ofertas</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="login.html" class="active">Ingresar</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Accede a tu cuenta</h2>
+    <p>Inicia sesión como <b>usuario</b>, <b>vendedor</b> o <b>administrador</b></p>
+  </section>
+
+  <div class="login-container">
+    <div id="mensaje-login" class="mensaje-login"></div>
+    
+    <div class="login-tabs">
+      <div class="login-tab active" id="tabUsuario">Usuario</div>
+      <div class="login-tab" id="tabVendedor">Vendedor</div>
+      <div class="login-tab" id="tabAdmin">Admin</div>
+    </div>
+
+    <!-- Formulario Usuario -->
+    <form class="login-form active" id="formUsuario">
+      <label>Correo electrónico</label>
+      <input type="email" name="email" required placeholder="tu@email.com">
+
+      <label>Contraseña</label>
+      <input type="password" name="password" required placeholder="••••••••">
+
+      <button type="submit" class="btn-login">Iniciar Sesión</button>
+      <p style="color:#aaa; margin-top:1em;">¿No tienes cuenta? <a href="registrarusuario.html" style="color:#daa520;">Regístrate aquí</a></p>
+    </form>
+
+    <!-- Formulario Vendedor -->
+    <form class="login-form" id="formVendedor">
+      <label>Usuario o Correo</label>
+      <input type="text" name="email" required placeholder="vendedor@420store.com">
+
+      <label>Contraseña</label>
+      <input type="password" name="password" required placeholder="••••••••">
+
+      <button type="submit" class="btn-login">Acceder como Vendedor</button>
+      <p style="color:#aaa; margin-top:1em;">¿No estás registrado? <a href="registrar_Vendedor.html" style="color:#daa520;">Regístrate aquí</a></p>
+    </form>
+
+    <!-- Formulario Administrador -->
+    <form class="login-form" id="formAdmin">
+      <label>Correo de Administrador</label>
+      <input type="email" name="email" required placeholder="admin@420store.com">
+
+      <label>Contraseña</label>
+      <input type="password" name="password" required placeholder="••••••••">
+
+      <button type="submit" class="btn-login">🔐 Acceder como Admin</button>
+      <p style="color:#ff9800; margin-top:1em; font-size:0.85rem;">⚠️ Solo personal autorizado</p>
+    </form>
+  </div>
+
+  <footer>
+    <p>© 2025 420 STORE. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    const tabUsuario = document.getElementById("tabUsuario");
+    const tabVendedor = document.getElementById("tabVendedor");
+    const tabAdmin = document.getElementById("tabAdmin");
+    const formUsuario = document.getElementById("formUsuario");
+    const formVendedor = document.getElementById("formVendedor");
+    const formAdmin = document.getElementById("formAdmin");
+    const mensajeDiv = document.getElementById("mensaje-login");
+
+    // Función para mostrar mensajes
+    function mostrarMensaje(texto, tipo) {
+      mensajeDiv.textContent = texto;
+      mensajeDiv.className = `mensaje-login ${tipo}`;
+      mensajeDiv.style.display = 'block';
+      
+      setTimeout(() => {
+        mensajeDiv.style.display = 'none';
+      }, 5000);
+    }
+
+    // Cambio de tabs
+    tabUsuario.addEventListener("click", () => {
+      tabUsuario.classList.add("active");
+      tabVendedor.classList.remove("active");
+      tabAdmin.classList.remove("active");
+      formUsuario.classList.add("active");
+      formVendedor.classList.remove("active");
+      formAdmin.classList.remove("active");
+      mensajeDiv.style.display = 'none';
+    });
+
+    tabVendedor.addEventListener("click", () => {
+      tabVendedor.classList.add("active");
+      tabUsuario.classList.remove("active");
+      tabAdmin.classList.remove("active");
+      formVendedor.classList.add("active");
+      formUsuario.classList.remove("active");
+      formAdmin.classList.remove("active");
+      mensajeDiv.style.display = 'none';
+    });
+
+    tabAdmin.addEventListener("click", () => {
+      tabAdmin.classList.add("active");
+      tabUsuario.classList.remove("active");
+      tabVendedor.classList.remove("active");
+      formAdmin.classList.add("active");
+      formUsuario.classList.remove("active");
+      formVendedor.classList.remove("active");
+      mensajeDiv.style.display = 'none';
+    });
+
+    // Manejar envío de formulario de usuario
+    formUsuario.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(formUsuario);
+      formData.append('tipo', 'usuario');
+      
+      try {
+        const response = await fetch('php/login.php', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+          mostrarMensaje(result.message, 'exito');
+          setTimeout(() => {
+            window.location.href = result.data.redirect;
+          }, 1000);
+        } else {
+          mostrarMensaje(result.message, 'error');
+        }
+      } catch (error) {
+        mostrarMensaje('Error al conectar con el servidor', 'error');
+        console.error(error);
+      }
+    });
+
+    // Manejar envío de formulario de vendedor
+    formVendedor.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(formVendedor);
+      formData.append('tipo', 'vendedor');
+      
+      try {
+        const response = await fetch('php/login.php', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+          mostrarMensaje(result.message, 'exito');
+          setTimeout(() => {
+            window.location.href = result.data.redirect;
+          }, 1000);
+        } else {
+          mostrarMensaje(result.message, 'error');
+        }
+      } catch (error) {
+        mostrarMensaje('Error al conectar con el servidor', 'error');
+        console.error(error);
+      }
+    });
+
+    // Manejar envío de formulario de administrador
+    formAdmin.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(formAdmin);
+      formData.append('tipo', 'admin');
+      
+      try {
+        const response = await fetch('php/login.php', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+        
+        if (result.success) {
+          mostrarMensaje('✅ ' + result.message, 'exito');
+          setTimeout(() => {
+            window.location.href = result.data.redirect;
+          }, 1000);
+        } else {
+          mostrarMensaje('❌ ' + result.message, 'error');
+        }
+      } catch (error) {
+        mostrarMensaje('Error al conectar con el servidor', 'error');
+        console.error(error);
+      }
+    });
+
+    // Verificar si hay parámetro de logout
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('logout') === '1') {
+      mostrarMensaje('Sesión cerrada exitosamente', 'exito');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>420 STORE | Productos</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    .filtros-container {
+      background: #111;
+      border: 1px solid #b8860b;
+      border-radius: 15px;
+      padding: 1.5em;
+      margin: 1em 5%;
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filtros-container input,
+    .filtros-container select {
+      padding: 0.6em;
+      border: 1px solid #b8860b;
+      border-radius: 8px;
+      background: #0b0b0b;
+      color: #f4f4f4;
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .filtros-container button {
+      padding: 0.6em 1.5em;
+      background: linear-gradient(90deg, #b8860b, #daa520);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .filtros-container button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #daa520;
+    }
+
+    .buscador {
+      width: 100%;
+      max-width: 500px;
+      padding: 0.8em;
+      border: 2px solid #b8860b;
+      border-radius: 25px;
+      background: #0b0b0b;
+      color: #f4f4f4;
+      font-size: 1rem;
+    }
+
+    .buscador:focus {
+      outline: none;
+      box-shadow: 0 0 10px #daa520;
+    }
+  </style>
+</head>
+<body>
+
+<!-- PANEL DEL CARRITO -->
+<div id="carritoPanel" class="carrito-panel">
+  <h2 class="carrito-titulo">🛒 Tu Carrito</h2>
+  <div id="carritoContenido"></div>
+  <p class="carrito-total">Total: <span id="carritoTotal">0</span></p>
+  <button class="btn-carrito-accion vaciar" onclick="vaciarCarrito()">Vaciar Carrito</button>
+  <button class="btn-carrito-accion" onclick="procesarCompra()" style="background:#4CAF50;border-color:#4CAF50;color:#fff;">💳 Comprar Ahora</button>
+  <button class="btn-carrito-accion cerrar" onclick="toggleCarrito()">Cerrar</button>
+</div>
+
+<header>
+  <h1>420 STORE</h1>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a class="active" href="productos.html">Productos</a>
+    <a href="ofertas.html">Ofertas</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="login.html" id="nav-usuario-link">Ingresar</a>
+    <button class="btn-carrito-header" onclick="toggleCarrito()">
+      🛒 Carrito (<span id="carritoContador">0</span>)
+    </button>
+    <span id="menu-puntos" class="puntos-menu"></span>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Catálogo Premium</h2>
+  <p>Encuentra los mejores productos deportivos</p>
+  <div style="margin-top:2em;">
+    <input type="text" id="buscadorProductos" class="buscador" placeholder="🔍 Buscar productos...">
+  </div>
+</section>
+
+<div class="panel-puntos">
+  <h3>Tu progreso</h3>
+  <div class="barra-puntos"><div id="barra-progreso"></div></div>
+  <p id="estado-puntos"></p>
+</div>
+
+<!-- FILTROS -->
+<div class="filtros-container">
+  <select id="selectCategoria">
+    <option value="">Todas las categorías</option>
+  </select>
+  <input type="number" id="minPrecio" placeholder="Precio mínimo" min="0">
+  <input type="number" id="maxPrecio" placeholder="Precio máximo" min="0">
+  <select id="selectOrden">
+    <option value="nombre_asc">Nombre A-Z</option>
+    <option value="nombre_desc">Nombre Z-A</option>
+    <option value="precio_asc">Menor precio</option>
+    <option value="precio_desc">Mayor precio</option>
+  </select>
+  <button onclick="aplicarFiltros()">Filtrar</button>
+  <button onclick="limpiarFiltros()">Limpiar</button>
+</div>
+
+<!-- PRODUCTOS -->
+<section class="productos">
+  <h2>Todos los productos</h2>
+  <div id="grid-productos" class="grid-productos">
+    <p style="text-align:center;color:#999;padding:2em;">⏳ Cargando productos...</p>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 420 STORE – Calidad y Exclusividad</p>
+</footer>
+
+<!-- ===================== SCRIPTS ===================== -->
+<script src="js/tienda.js"></script>
+
+<script>
+// Verificación de sesión para productos.html
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const response = await fetch('php/verificar_sesion.php');
+    const result = await response.json();
+    
+    const navLink = document.getElementById('nav-usuario-link');
+    
+    if (result.success && result.data.usuario) {
+      const usuario = result.data.usuario;
+      
+      // Usuario logueado
+      navLink.textContent = usuario.nombre;
+      navLink.href = 'perfil.html';
+      
+      // Agregar botón de logout
+      if (!document.getElementById('btn-logout-nav')) {
+        const logoutBtn = document.createElement('a');
+        logoutBtn.id = 'btn-logout-nav';
+        logoutBtn.href = 'php/logout.php';
+        logoutBtn.textContent = 'Cerrar Sesión';
+        logoutBtn.style.cssText = 'color:#ff4444;margin-left:1em;';
+        navLink.after(logoutBtn);
+      }
+      
+    } else {
+      // No hay sesión
+      navLink.textContent = 'Ingresar';
+      navLink.href = 'login.html';
+    }
+  } catch (error) {
+    console.error('Error al verificar sesión:', error);
+  }
+});
+</script>
+
+</body>
+</html>

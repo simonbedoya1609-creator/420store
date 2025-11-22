@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>420 Store | Mi Perfil</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    .perfil-container {
+      max-width: 1200px;
+      margin: 2em auto;
+      padding: 0 2em;
+    }
+
+    .perfil-header {
+      background: linear-gradient(135deg, #1a1a1a, #0b0b0b);
+      border: 2px solid #b8860b;
+      border-radius: 15px;
+      padding: 2em;
+      margin-bottom: 2em;
+      display: flex;
+      align-items: center;
+      gap: 2em;
+    }
+
+    .perfil-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #b8860b, #daa520);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #000;
+      font-weight: bold;
+      border: 4px solid #daa520;
+    }
+
+    .perfil-info h2 {
+      color: #daa520;
+      margin-bottom: 0.5em;
+    }
+
+    .perfil-info p {
+      color: #ccc;
+      margin: 0.3em 0;
+    }
+
+    .perfil-badge {
+      display: inline-block;
+      padding: 0.5em 1em;
+      background: #b8860b;
+      color: #000;
+      border-radius: 20px;
+      font-weight: bold;
+      margin-top: 0.5em;
+    }
+
+    .perfil-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5em;
+      margin-bottom: 2em;
+    }
+
+    .stat-card {
+      background: #111;
+      border: 1px solid #b8860b;
+      border-radius: 15px;
+      padding: 1.5em;
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      color: #daa520;
+      font-size: 2rem;
+      margin: 0.5em 0;
+    }
+
+    .stat-card p {
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    .historial-container {
+      background: #111;
+      border: 1px solid #b8860b;
+      border-radius: 15px;
+      padding: 2em;
+    }
+
+    .historial-container h3 {
+      color: #daa520;
+      margin-bottom: 1em;
+      font-size: 1.5rem;
+    }
+
+    .pedido-item {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 1em;
+      margin-bottom: 1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pedido-info {
+      flex: 1;
+    }
+
+    .pedido-estado {
+      padding: 0.5em 1em;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .estado-pagado { background: #4CAF50; color: white; }
+    .estado-enviado { background: #2196F3; color: white; }
+    .estado-pendiente { background: #FF9800; color: white; }
+    .estado-entregado { background: #9C27B0; color: white; }
+    .estado-cancelado { background: #f44336; color: white; }
+
+    .btn-cerrar-sesion {
+      background: transparent;
+      border: 2px solid #ff4444;
+      color: #ff4444;
+      padding: 0.8em 2em;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 2em;
+    }
+
+    .btn-cerrar-sesion:hover {
+      background: #ff4444;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>420 STORE</h1>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="productos.html">Productos</a>
+    <a href="ofertas.html">Ofertas</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="perfil.html" class="active">Mi Perfil</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Mi Perfil</h2>
+  <p>Gestiona tu cuenta y revisa tu historial</p>
+</section>
+
+<div class="perfil-container">
+  <!-- HEADER DEL PERFIL -->
+  <div class="perfil-header">
+    <div class="perfil-avatar" id="avatar">?</div>
+    <div class="perfil-info">
+      <h2 id="nombre-usuario">Cargando...</h2>
+      <p id="email-usuario">---</p>
+      <span class="perfil-badge" id="nivel-usuario">Bronce</span>
+    </div>
+  </div>
+
+  <!-- PANEL DE PUNTOS -->
+  <div class="panel-puntos">
+    <h3>Tu progreso</h3>
+    <div class="barra-puntos"><div id="barra-progreso"></div></div>
+    <p id="estado-puntos">Cargando...</p>
+  </div>
+
+  <!-- ESTADÍSTICAS -->
+  <div class="perfil-stats">
+    <div class="stat-card">
+      <p>Puntos Totales</p>
+      <h3 id="stat-puntos">0</h3>
+    </div>
+    <div class="stat-card">
+      <p>Total Pedidos</p>
+      <h3 id="stat-pedidos">0</h3>
+    </div>
+    <div class="stat-card">
+      <p>Total Gastado</p>
+      <h3 id="stat-gastado">$0</h3>
+    </div>
+  </div>
+
+  <!-- HISTORIAL DE PEDIDOS -->
+  <div class="historial-container">
+    <h3>📦 Historial de Pedidos</h3>
+    <div id="historial-pedidos">
+      <p style="text-align:center;color:#999;padding:2em;">Cargando historial...</p>
+    </div>
+  </div>
+
+  <!-- BOTÓN CERRAR SESIÓN -->
+  <div style="text-align:center;">
+    <button class="btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar Sesión</button>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 420 STORE – Tu Perfil Premium</p>
+</footer>
+
+<script>
+// Verificar sesión y cargar datos
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    // Verificar sesión
+    const response = await fetch('php/verificar_sesion.php');
+    const result = await response.json();
+    
+    if (!result.success || !result.data.sesion_activa) {
+      alert('Debes iniciar sesión para ver tu perfil');
+      window.location.href = 'login.html';
+      return;
+    }
+    
+    const usuario = result.data.usuario;
+    
+    // Actualizar información del perfil
+    document.getElementById('nombre-usuario').textContent = usuario.nombre;
+    document.getElementById('email-usuario').textContent = usuario.email;
+    document.getElementById('nivel-usuario').textContent = `Nivel: ${usuario.nivel}`;
+    document.getElementById('stat-puntos').textContent = usuario.puntos;
+    
+    // Avatar con inicial
+    const inicial = usuario.nombre.charAt(0).toUpperCase();
+    document.getElementById('avatar').textContent = inicial;
+    
+    // Barra de progreso
+    const progreso = usuario.progreso_nivel || 0;
+    document.getElementById('barra-progreso').style.width = progreso + '%';
+    document.getElementById('estado-puntos').textContent = 
+      `${usuario.puntos} puntos | Nivel ${usuario.nivel} (${Math.round(progreso)}%)`;
+    
+    // Cargar estadísticas
+    cargarEstadisticas();
+    
+    // Cargar historial
+    cargarHistorial();
+    
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error al cargar el perfil');
+    window.location.href = 'index.html';
+  }
+});
+
+// Cargar estadísticas del usuario
+async function cargarEstadisticas() {
+  try {
+    const response = await fetch('php/pedidos.php?accion=estadisticas');
+    const result = await response.json();
+    
+    if (result.success) {
+      document.getElementById('stat-pedidos').textContent = result.data.total_pedidos;
+      document.getElementById('stat-gastado').textContent = 
+        '$' + Number(result.data.total_gastado).toLocaleString();
+    }
+  } catch (error) {
+    console.error('Error al cargar estadísticas:', error);
+  }
+}
+
+// Cargar historial de pedidos
+async function cargarHistorial() {
+  try {
+    const response = await fetch('php/pedidos.php?accion=historial&limite=10');
+    const result = await response.json();
+    
+    const container = document.getElementById('historial-pedidos');
+    
+    if (result.success && result.data.pedidos.length > 0) {
+      container.innerHTML = '';
+      
+      result.data.pedidos.forEach(pedido => {
+        const fecha = new Date(pedido.fecha_pedido).toLocaleDateString('es-CO');
+        
+        const div = document.createElement('div');
+        div.className = 'pedido-item';
+        div.innerHTML = `
+          <div class="pedido-info">
+            <strong>Pedido #${pedido.id}</strong><br>
+            <span style="color:#999;font-size:0.9rem;">${fecha}</span><br>
+            <span style="color:#daa520;">Total: $${Number(pedido.total).toLocaleString()}</span> |
+            <span style="color:#4CAF50;">+${pedido.puntos_ganados} puntos</span>
+          </div>
+          <span class="pedido-estado estado-${pedido.estado}">${pedido.estado.toUpperCase()}</span>
+        `;
+        container.appendChild(div);
+      });
+    } else {
+      container.innerHTML = '<p style="text-align:center;color:#999;padding:2em;">No tienes pedidos aún</p>';
+    }
+  } catch (error) {
+    console.error('Error al cargar historial:', error);
+  }
+}
+
+// Cerrar sesión
+function cerrarSesion() {
+  if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+    window.location.href = 'php/logout.php';
+  }
+}
+</script>
+
+</body>
+</html>

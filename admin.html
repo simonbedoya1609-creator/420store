@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>420 Store | Panel Admin</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    .dashboard {
+      padding: 2em 5%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5em;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #1a1a1a, #0b0b0b);
+      border: 1px solid #b8860b;
+      border-radius: 15px;
+      padding: 1.5em;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(218,165,32,0.3);
+    }
+
+    .stat-card h3 {
+      color: #daa520;
+      font-size: 2.5rem;
+      margin: 0.5em 0;
+    }
+
+    .stat-card p {
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 1em;
+      margin: 2em 5% 1em;
+      border-bottom: 2px solid #b8860b;
+      padding-bottom: 0;
+    }
+
+    .tab {
+      background: transparent;
+      border: none;
+      color: #999;
+      padding: 1em 2em;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tab.active {
+      color: #daa520;
+      border-bottom-color: #daa520;
+    }
+
+    .tab:hover {
+      color: #daa520;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 2em 5%;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .admin-table {
+      width: 100%;
+      background: #111;
+      border: 1px solid #b8860b;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .admin-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .admin-table th {
+      background: #1a1a1a;
+      color: #daa520;
+      padding: 1em;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .admin-table td {
+      padding: 1em;
+      border-top: 1px solid #333;
+      color: #eee;
+    }
+
+    .admin-table tr:hover {
+      background: #1a1a1a;
+    }
+
+    .btn-admin {
+      background: transparent;
+      border: 2px solid #b8860b;
+      color: #daa520;
+      padding: 0.5em 1em;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: 0.3s;
+      margin: 0 0.25em;
+    }
+
+    .btn-admin:hover {
+      background: #b8860b;
+      color: #000;
+    }
+
+    .btn-admin.danger {
+      border-color: #ff4444;
+      color: #ff4444;
+    }
+
+    .btn-admin.danger:hover {
+      background: #ff4444;
+      color: #fff;
+    }
+
+    .btn-admin.success {
+      border-color: #4CAF50;
+      color: #4CAF50;
+    }
+
+    .btn-admin.success:hover {
+      background: #4CAF50;
+      color: #fff;
+    }
+
+    .form-admin {
+      background: #111;
+      border: 1px solid #b8860b;
+      border-radius: 15px;
+      padding: 2em;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-admin label {
+      display: block;
+      color: #daa520;
+      margin-top: 1em;
+      font-size: 0.9rem;
+    }
+
+    .form-admin input,
+    .form-admin textarea,
+    .form-admin select {
+      width: 100%;
+      padding: 0.8em;
+      margin-top: 0.3em;
+      border: 1px solid #b8860b;
+      border-radius: 8px;
+      background: #0b0b0b;
+      color: #f4f4f4;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-admin button {
+      width: 100%;
+      margin-top: 1.5em;
+    }
+
+    .bienvenida-admin {
+      background: #1a1a1a;
+      border: 1px solid #4CAF50;
+      border-radius: 10px;
+      padding: 1em;
+      margin: 1em 5%;
+      text-align: center;
+      color: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>420 STORE - Admin</h1>
+  <nav>
+    <a href="index.html">Tienda</a>
+    <a href="admin.html" class="active">Dashboard</a>
+    <span id="nombre-vendedor" style="color:#daa520;margin-left:1em;"></span>
+    <a href="php/logout.php" style="color:#ff4444;margin-left:1em;">Cerrar Sesión</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Panel de Administración</h2>
+  <p>Gestiona tu tienda desde aquí</p>
+</section>
+
+<div class="bienvenida-admin" id="bienvenida" style="display:none;">
+  ✅ Sesión de vendedor activa
+</div>
+
+<!-- ESTADÍSTICAS -->
+<div class="dashboard" id="dashboard">
+  <div class="stat-card">
+    <p>Usuarios Activos</p>
+    <h3 id="stat-usuarios">-</h3>
+  </div>
+  <div class="stat-card">
+    <p>Productos Disponibles</p>
+    <h3 id="stat-productos">-</h3>
+  </div>
+  <div class="stat-card">
+    <p>Total Pedidos</p>
+    <h3 id="stat-pedidos">-</h3>
+  </div>
+  <div class="stat-card">
+    <p>Ventas Totales</p>
+    <h3 id="stat-ventas">$0</h3>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="cambiarTab('productos')">Productos</button>
+  <button class="tab" onclick="cambiarTab('usuarios')">Usuarios</button>
+  <button class="tab" onclick="cambiarTab('pedidos')">Pedidos</button>
+  <button class="tab" onclick="cambiarTab('agregar')">Agregar Producto</button>
+</div>
+
+<!-- TAB: PRODUCTOS -->
+<div class="tab-content active" id="tab-productos">
+  <h2 style="color:#daa520;margin-bottom:1em;">Gestión de Productos</h2>
+  <div class="admin-table">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Categoría</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-productos">
+        <tr><td colspan="6" style="text-align:center;padding:2em;">Cargando...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TAB: USUARIOS -->
+<div class="tab-content" id="tab-usuarios">
+  <h2 style="color:#daa520;margin-bottom:1em;">Gestión de Usuarios</h2>
+  <div class="admin-table">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Puntos</th>
+          <th>Nivel</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-usuarios">
+        <tr><td colspan="7" style="text-align:center;padding:2em;">Cargando...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TAB: PEDIDOS -->
+<div class="tab-content" id="tab-pedidos">
+  <h2 style="color:#daa520;margin-bottom:1em;">Gestión de Pedidos</h2>
+  <div class="admin-table">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Usuario</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-pedidos">
+        <tr><td colspan="6" style="text-align:center;padding:2em;">Cargando...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TAB: AGREGAR PRODUCTO -->
+<div class="tab-content" id="tab-agregar">
+  <h2 style="color:#daa520;text-align:center;margin-bottom:1em;">Agregar Nuevo Producto</h2>
+  <form class="form-admin" id="formAgregarProducto">
+    <label>Nombre del Producto</label>
+    <input type="text" name="nombre" required>
+
+    <label>Descripción</label>
+    <textarea name="descripcion" rows="3" required></textarea>
+
+    <label>Precio (COP)</label>
+    <input type="number" name="precio" required min="0" step="1000">
+
+    <label>URL de Imagen</label>
+    <input type="url" name="imagen_url" required>
+
+    <label>Stock</label>
+    <input type="number" name="stock" required min="0">
+
+    <label>Categoría</label>
+    <select name="categoria" required>
+      <option value="Ropa">Ropa</option>
+      <option value="Calzado">Calzado</option>
+      <option value="Accesorios">Accesorios</option>
+      <option value="Tecnología">Tecnología</option>
+      <option value="Deportes">Deportes</option>
+    </select>
+
+    <label>Descuento (%)</label>
+    <input type="number" name="descuento" min="0" max="100" value="0">
+
+    <button type="submit" class="btn">Agregar Producto</button>
+  </form>
+</div>
+
+<footer>
+  <p>© 2025 420 STORE - Panel de Administración</p>
+</footer>
+
+<script>
+  const API_BASE = 'php/';
+
+  // VERIFICAR PERMISOS DE VENDEDOR
+  document.addEventListener('DOMContentLoaded', async () => {
+    console.log('🔍 Verificando sesión de vendedor...');
+    
+    try {
+      const response = await fetch('php/verificar_vendedor.php');
+      const result = await response.json();
+      
+      console.log('Resultado verificación:', result);
+      
+      if (!result.success || !result.data.es_vendedor) {
+        console.error('❌ No es vendedor o sesión inválida');
+        alert('Acceso denegado. Debes iniciar sesión como vendedor.');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // Mostrar información del vendedor
+      console.log('✅ Vendedor verificado:', result.data.vendedor.nombre);
+      document.getElementById('nombre-vendedor').textContent = '👤 ' + result.data.vendedor.nombre;
+      document.getElementById('bienvenida').style.display = 'block';
+      document.getElementById('bienvenida').textContent = `✅ Bienvenido, ${result.data.vendedor.nombre}`;
+      
+      // Cargar datos
+      cargarEstadisticas();
+      cargarProductosAdmin();
+      
+    } catch (error) {
+      console.error('❌ Error al verificar:', error);
+      alert('Error de autenticación');
+      window.location.href = 'login.html';
+    }
+  });
+
+  // Cargar estadísticas
+  async function cargarEstadisticas() {
+    try {
+      const response = await fetch(`${API_BASE}admin.php?accion=estadisticas`);
+      const result = await response.json();
+      
+      if (result.success) {
+        document.getElementById('stat-usuarios').textContent = result.data.total_usuarios;
+        document.getElementById('stat-productos').textContent = result.data.total_productos;
+        document.getElementById('stat-pedidos').textContent = result.data.total_pedidos;
+        document.getElementById('stat-ventas').textContent = '$' + Number(result.data.ventas_totales).toLocaleString();
+      }
+    } catch (error) {
+      console.error('Error al cargar estadísticas:', error);
+    }
+  }
+
+  // Cargar productos
+  async function cargarProductosAdmin() {
+    try {
+      const response = await fetch(`${API_BASE}obtenerProductos.php?accion=listar&limite=100`);
+      const result = await response.json();
+      
+      if (result.success) {
+        const tbody = document.getElementById('tabla-productos');
+        tbody.innerHTML = '';
+        
+        result.data.productos.forEach(prod => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${prod.id}</td>
+            <td>${prod.nombre}</td>
+            <td>$${Number(prod.precio).toLocaleString()}</td>
+            <td>${prod.stock}</td>
+            <td>${prod.categoria}</td>
+            <td>
+              <button class="btn-admin" onclick="editarProducto(${prod.id})">Editar</button>
+              <button class="btn-admin danger" onclick="eliminarProducto(${prod.id})">Eliminar</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  // Cargar usuarios
+  async function cargarUsuariosAdmin() {
+    try {
+      const response = await fetch(`${API_BASE}admin.php?accion=listar_usuarios`);
+      const result = await response.json();
+      
+      if (result.success) {
+        const tbody = document.getElementById('tabla-usuarios');
+        tbody.innerHTML = '';
+        
+        result.data.usuarios.forEach(user => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${user.id}</td>
+            <td>${user.nombre}</td>
+            <td>${user.email}</td>
+            <td>${user.puntos}</td>
+            <td>${user.nivel}</td>
+            <td><span style="color:${user.estado === 'activo' ? '#4CAF50' : '#ff4444'}">${user.estado}</span></td>
+            <td>
+              <button class="btn-admin ${user.estado === 'activo' ? 'danger' : 'success'}" 
+                      onclick="cambiarEstadoUsuario(${user.id}, '${user.estado === 'activo' ? 'bloqueado' : 'activo'}')">
+                ${user.estado === 'activo' ? 'Bloquear' : 'Activar'}
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  // Cargar pedidos
+  async function cargarPedidosAdmin() {
+    try {
+      const response = await fetch(`${API_BASE}admin.php?accion=listar_pedidos&limite=50`);
+      const result = await response.json();
+      
+      if (result.success) {
+        const tbody = document.getElementById('tabla-pedidos');
+        tbody.innerHTML = '';
+        
+        result.data.pedidos.forEach(ped => {
+          const tr = document.createElement('tr');
+          const fecha = new Date(ped.fecha_pedido).toLocaleDateString();
+          tr.innerHTML = `
+            <td>${ped.id}</td>
+            <td>${ped.usuario_nombre}</td>
+            <td>$${Number(ped.total).toLocaleString()}</td>
+            <td>${ped.estado}</td>
+            <td>${fecha}</td>
+            <td>
+              <select onchange="cambiarEstadoPedido(${ped.id}, this.value)" style="background:#0b0b0b;color:#f4f4f4;padding:0.5em;border:1px solid #b8860b;border-radius:5px;">
+                <option value="pendiente" ${ped.estado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+                <option value="pagado" ${ped.estado === 'pagado' ? 'selected' : ''}>Pagado</option>
+                <option value="enviado" ${ped.estado === 'enviado' ? 'selected' : ''}>Enviado</option>
+                <option value="entregado" ${ped.estado === 'entregado' ? 'selected' : ''}>Entregado</option>
+                <option value="cancelado" ${ped.estado === 'cancelado' ? 'selected' : ''}>Cancelado</option>
+              </select>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  // Cambiar tab
+  function cambiarTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+    
+    if (tab === 'productos') cargarProductosAdmin();
+    if (tab === 'usuarios') cargarUsuariosAdmin();
+    if (tab === 'pedidos') cargarPedidosAdmin();
+  }
+
+  // Agregar producto
+  document.getElementById('formAgregarProducto').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    
+    try {
+      const response = await fetch(`${API_BASE}admin.php?accion=agregar_producto`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      const result = await response.json();
+      
+      alert(result.message);
+      
+      if (result.success) {
+        e.target.reset();
+        cambiarTab('productos');
+      }
+    } catch (error) {
+      alert('Error al agregar producto');
+    }
+  });
+
+  // Eliminar producto
+  async function eliminarProducto(id) {
+    if (!confirm('¿Eliminar este producto?')) return;
+    
+    const formData = new FormData();
+    formData.append('id', id);
+    
+    try {
+      const response = await fetch(`${API_BASE}admin.php?accion=eliminar_producto`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      const result = await response.json();
+      alert(result.message);
+      
+      if (result.success) cargarProductosAdmin();
+    } catch (error) {
+      alert('Error al eliminar');
+    }
+  }
+
+  // Cambiar estado usuario
+  async function cambiarEstadoUsuario(id, estado) {
+    const formData = new FormData();
+    formData.append('usuario_id', id);
+    formData.append('estado', estado);
+    
+    try {
+      const response = await fetch(`${API_BASE}admin.php?accion=cambiar_estado_usuario`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      const result = await response.json();
+      alert(result.message);
+      
+      if (result.success) cargarUsuariosAdmin();
+    } catch (error) {
+      alert('Error');
+    }
+  }
+
+  // Cambiar estado pedido
+  async function cambiarEstadoPedido(id, estado) {
+    const formData = new FormData();
+    formData.append('pedido_id', id);
+    formData.append('estado', estado);
+    
+    try {
+      const response = await fetch(`${API_BASE}admin.php?accion=cambiar_estado_pedido`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      const result = await response.json();
+      if (result.success) {
+        alert('Estado actualizado');
+      }
+    } catch (error) {
+      alert('Error');
+    }
+  }
+  function editarProducto(id) {
+  // Obtener datos del producto
+  fetch(`php/obtenerProductos.php?accion=obtener&id=${id}`)
+    .then(response => response.json())
+    .then(result => {
+      if (result.success && result.data.producto) {
+        const prod = result.data.producto;
+        
+        // Crear modal de edición
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;justify-content:center;align-items:center;z-index:99999;';
+        
+        modal.innerHTML = `
+          <div style="background:#111;border:2px solid #b8860b;border-radius:15px;padding:2em;max-width:600px;width:90%;max-height:90vh;overflow-y:auto;">
+            <h2 style="color:#daa520;text-align:center;margin-bottom:1em;">Editar Producto</h2>
+            
+            <form id="formEditarProducto">
+              <input type="hidden" name="id" value="${prod.id}">
+              
+              <label style="display:block;color:#daa520;margin-top:1em;">Nombre</label>
+              <input type="text" name="nombre" value="${prod.nombre}" required style="width:100%;padding:0.8em;background:#0b0b0b;border:1px solid #b8860b;border-radius:8px;color:#f4f4f4;">
+              
+              <label style="display:block;color:#daa520;margin-top:1em;">Descripción</label>
+              <textarea name="descripcion" rows="3" required style="width:100%;padding:0.8em;background:#0b0b0b;border:1px solid #b8860b;border-radius:8px;color:#f4f4f4;">${prod.descripcion}</textarea>
+              
+              <label style="display:block;color:#daa520;margin-top:1em;">Precio (COP)</label>
+              <input type="number" name="precio" value="${prod.precio}" required min="0" step="1000" style="width:100%;padding:0.8em;background:#0b0b0b;border:1px solid #b8860b;border-radius:8px;color:#f4f4f4;">
+              
+              <label style="display:block;color:#daa520;margin-top:1em;">URL de Imagen</label>
+              <input type="url" name="imagen_url" value="${prod.imagen_url}" required style="width:100%;padding:0.8em;background:#0b0b0b;border:1px solid #b8860b;border-radius:8px;color:#f4f4f4;">
+              
+              <label style="display:block;color:#daa520;margin-top:1em;">Stock</label>
+              <input type="number" name="stock" value="${prod.stock}" required min="0" style="width:100%;padding:0.8em;background:#0b0b0b;border:1px solid #b8860b;border-radius:8px;color:#f4f4f4;">
+              
+              <label style="display:block;color:#daa520;margin-top:1em;">Categoría</label>
+              <select name="categoria" required style="width:100%;padding:0.8em;background:#0b0b0b;border:1px solid #b8860b;border-radius:8px;color:#f4f4f4;">
+                <option value="Ropa" ${prod.categoria === 'Ropa' ? 'selected' : ''}>Ropa</option>
+                <option value="Calzado" ${prod.categoria === 'Calzado' ? 'selected' : ''}>Calzado</option>
+                <option value="Accesorios" ${prod.categoria === 'Accesorios' ? 'selected' : ''}>Accesorios</option>
+                <option value="Tecnología" ${prod.categoria === 'Tecnología' ? 'selected' : ''}>Tecnología</option>
+                <option value="Deportes" ${prod.categoria === 'Deportes' ? 'selected' : ''}>Deportes</option>
+              </select>
+              
+              <label style="display:block;color:#daa520;margin-top:1em;">Descuento (%)</label>
+              <input type="number" name="descuento" value="${prod.descuento || 0}" min="0" max="100" style="width:100%;padding:0.8em;background:#0b0b0b;border:1px solid #b8860b;border-radius:8px;color:#f4f4f4;">
+              
+              <div style="display:flex;gap:1em;margin-top:2em;">
+                <button type="submit" class="btn" style="flex:1;background:linear-gradient(90deg,#b8860b,#daa520);color:#000;border:none;padding:0.8em;border-radius:25px;font-weight:bold;cursor:pointer;">Guardar Cambios</button>
+                <button type="button" onclick="this.closest('div').parentElement.parentElement.remove()" class="btn" style="flex:1;background:transparent;border:2px solid #ff4444;color:#ff4444;padding:0.8em;border-radius:25px;font-weight:bold;cursor:pointer;">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Manejar submit del formulario
+        document.getElementById('formEditarProducto').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const formData = new FormData(e.target);
+          
+          try {
+            const response = await fetch('php/admin.php?accion=editar_producto', {
+              method: 'POST',
+              body: formData
+            });
+            
+            const result = await response.json();
+            alert(result.message);
+            
+            if (result.success) {
+              modal.remove();
+              cargarProductosAdmin();
+            }
+          } catch (error) {
+            alert('Error al guardar cambios');
+            console.error(error);
+          }
+        });
+        
+      } else {
+        alert('Error al cargar producto');
+      }
+    })
+    .catch(error => {
+      alert('Error al obtener producto');
+      console.error(error);
+    });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>420 Store | Contacto</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <h1>420 STORE</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="productos.html">Productos</a>
+      <a href="ofertas.html">Ofertas</a>
+      <a href="contacto.html" class="active">Contacto</a>
+      <a href="login.html">Ingresar</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>¿Tienes alguna pregunta?</h2>
+    <p>Estamos aquí para ayudarte. Escríbenos y te responderemos en poco tiempo.</p>
+  </section>
+
+  <section class="productos">
+    <h2>Contáctanos</h2>
+    <form class="form-card" id="contactForm" onsubmit="return enviarFormulario()">
+      <label>Nombre</label>
+      <input type="text" name="nombre" required>
+
+      <label>Correo electrónico</label>
+      <input type="email" name="correo" required>
+
+      <label>Asunto</label>
+      <input type="text" name="asunto" required>
+
+      <label>Mensaje</label>
+      <textarea name="mensaje" rows="5" required></textarea>
+
+      <button type="submit" class="btn">Enviar mensaje</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2025 420 STORE. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    function enviarFormulario() {
+      alert("Gracias por contactarnos 🌿 Te responderemos pronto.");
+      return false;
+    }
+  </script>
+  <!-- Verificación de sesión global -->
+<script src="js/verificar-sesion-global.js"></script>
+
+</body>
+</html>
+</body>
+</html>

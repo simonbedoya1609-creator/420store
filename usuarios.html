@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>420 Store | Usuarios</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    .panel {
+      width: 90%;
+      margin: 3em auto;
+      background: #111;
+      border: 1px solid #b8860b;
+      border-radius: 15px;
+      padding: 2em;
+      box-shadow: 0 0 25px rgba(218,165,32,0.15);
+    }
+
+    .panel h2 {
+      color: #daa520;
+      text-align: center;
+      margin-bottom: 1em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5em;
+    }
+
+    th, td {
+      border: 1px solid #b8860b;
+      padding: 0.8em;
+      text-align: center;
+      color: #eee;
+    }
+
+    th {
+      background: #222;
+      color: #daa520;
+    }
+
+    .btn-admin {
+      background: transparent;
+      border: 2px solid #b8860b;
+      color: #daa520;
+      padding: 0.5em 1.2em;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-admin:hover {
+      background: #b8860b;
+      color: #000;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>420 STORE</h1>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="admin.html">Administrador</a>
+    <a href="vendedores.html">Vendedores</a>
+    <a href="usuarios.html" class="active">Usuarios</a>
+    <a href="login.html">Salir</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Gestión de Usuarios</h2>
+  <p>Control de clientes registrados y su actividad.</p>
+</section>
+
+<div class="panel">
+  <table id="tablaUsuarios">
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Correo</th>
+      <th>Puntos</th>
+      <th>Nivel</th>
+      <th>Acciones</th>
+    </tr>
+    <!-- Los datos se cargarán dinámicamente -->
+    <tr>
+      <td>1</td>
+      <td>Andrés Salinas</td>
+      <td>andres@correo.com</td>
+      <td>320</td>
+      <td>Bronce</td>
+      <td>
+        <button class="btn-admin">Detalles</button>
+        <button class="btn-admin">Bloquear</button>
+      </td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Laura Pérez</td>
+      <td>laurap@correo.com</td>
+      <td>150</td>
+      <td>Bronce</td>
+      <td>
+        <button class="btn-admin">Detalles</button>
+        <button class="btn-admin">Bloquear</button>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<footer>
+  <p>© 2025 420 STORE. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Usuario | 420 Store</title>
+  <link rel="stylesheet" href="css/estilos.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    .registro-container {
+      max-width: 480px;
+      margin: 4em auto;
+      background: #111;
+      border: 1px solid #b8860b;
+      border-radius: 15px;
+      padding: 2.5em;
+      box-shadow: 0 0 25px rgba(218,165,32,0.15);
+    }
+
+    h2 {
+      color: #daa520;
+      text-align: center;
+      margin-bottom: 1em;
+    }
+
+    label {
+      color: #daa520;
+      display: block;
+      margin-top: 1em;
+      font-size: 0.9rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8em;
+      margin-top: 0.3em;
+      border: 1px solid #b8860b;
+      border-radius: 10px;
+      background: #0b0b0b;
+      color: #f4f4f4;
+    }
+
+    .btn-registro {
+      width: 100%;
+      background: transparent;
+      border: 2px solid #b8860b;
+      color: #daa520;
+      padding: 0.8em;
+      margin-top: 1.5em;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-registro:hover {
+      background: linear-gradient(90deg, #b8860b, #daa520);
+      color: #000;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>420 STORE</h1>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="productos.html">Productos</a>
+    <a href="ofertas.html">Ofertas</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="login.html">Ingresar</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Crea tu Cuenta</h2>
+  <p>Únete a la comunidad premium 🌿</p>
+</section>
+
+<div class="registro-container">
+  <h2>Registro de Usuario</h2>
+
+  <form id="formRegistro">
+    <label>Nombre completo</label>
+    <input type="text" name="nombre" required>
+
+    <label>Correo electrónico</label>
+    <input type="email" name="email" required>
+
+    <label>Contraseña</label>
+    <input type="password" name="password" required>
+
+    <label>Confirmar contraseña</label>
+    <input type="password" name="confirmar_password" required>
+
+    <button type="submit" class="btn-registro">Crear cuenta</button>
+
+    <p style="text-align:center; margin-top:1em; color:#ccc;">
+      ¿Ya tienes cuenta?
+      <a href="login.html" style="color:#daa520;">Inicia sesión</a>
+    </p>
+  </form>
+</div>
+
+<footer>
+  <p>© 2025 420 STORE. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+  document.getElementById('formRegistro').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    
+    // Validar que las contraseñas coincidan
+    const password = formData.get('password');
+    const confirmar = formData.get('confirmar_password');
+    
+    if (password !== confirmar) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
+    
+    try {
+      const response = await fetch('php/registrarUsuario.php', {
+        method: 'POST',
+        body: formData
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        alert(result.message);
+        window.location.href = result.data.redirect;
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      alert('Error al conectar con el servidor');
+      console.error(error);
+    }
+  });
+</script>
+
+</body>
+</html>
